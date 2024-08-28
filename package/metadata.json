@@ -1,0 +1,28 @@
+{
+    "KPackageStructure": "Plasma/Applet",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Name": "Brilliant Nurzaman",
+                "Email": ""
+            }
+        ],
+        "BugReportUrl": "https://github.com/imoize/plasmoid-ollamacontrol/issues",
+        "Category": "System Information",
+        "Description": "Quickly manage/control Ollama from plasma applet",
+        "EnabledByDefault": true,
+        "FormFactors": [
+            "desktop"
+        ],
+        "Icon": "ollama",
+        "Id": "com.github.imoize.ollamacontrol",
+        "License": "GPL-3.0",
+        "Name": "Ollama Control",
+        "Version": "1.0.0",
+        "Website": "https://github.com/imoize/plasmoid-ollamacontrol"
+    },
+    "X-KDE-Keywords": "ollama,ai,llm",
+    "X-Plasma-API-Minimum-Version": "6.0",
+    "X-Plasma-NotificationArea": "true",
+    "X-Plasma-NotificationAreaCategory": "SystemServices"
+}
