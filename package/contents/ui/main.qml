@@ -24,6 +24,7 @@ PlasmoidItem {
 
     Component.onCompleted: () => {
         Utils.checkStat();
+        Utils.getModels();
     }
 
     ListModel {

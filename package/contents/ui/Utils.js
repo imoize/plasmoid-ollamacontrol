@@ -231,33 +231,27 @@ function checkStat() {
     xhr.onreadystatechange = function() {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 200) {
+                ollamaRunning = true;
 
-                initCallback(xhr.status);
+                updateActionButton("Stop Ollama", Qt.resolvedUrl("icons/stop.svg"), "stopOllama");
 
+                // console.log("Ollama Running: " + ollamaRunning + " | Ollama is running");
             } else {
+                endAll();
+                ollamaRunning = false;
+
+                models.clear();
+                runningModels.clear();
+                
+                updateActionButton("Start Ollama", Qt.resolvedUrl("icons/start.svg"), "startOllama");
+
+                // console.log("Ollama Running: " + ollamaRunning + " | Ollama is not running");
                 console.error('Error Check Status: ' + xhr.status);
 
-                initCallback(xhr.status);
             }
         }
     };
     xhr.send();
-}
-
-function initCallback(resCode) {
-    if (resCode === 200) {
-        ollamaRunning = true;
-        // console.log("Ollama Running: " + ollamaRunning + " | Ollama is running");
-        updateActionButton("Stop Ollama", Qt.resolvedUrl("icons/stop.svg"), "stopOllama");
-        getModels();
-    } else if (resCode !== 200 || resCode === "") {
-        endAll()
-        ollamaRunning = false;
-        // console.log("Ollama Running: " + ollamaRunning + " | Ollama is not running");
-        models.clear();
-        runningModels.clear();
-        updateActionButton("Start Ollama", Qt.resolvedUrl("icons/start.svg"), "startOllama");
-    }
 }
 
 function updateActionButton(text, iconName, command) {

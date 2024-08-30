@@ -70,9 +70,12 @@ ColumnLayout {
     Connections {
         target: main
         function onExpandedChanged() {
-            if (main.expanded && ollamaRunning) {
-                Utils.getModels();
-            } else if (!main.expanded) {
+            if (main.expanded) {
+                Utils.checkStat();
+                if (ollamaRunning) {
+                    Utils.getModels();
+                }
+            } else {
                 deleteDialog.close();
             }
         }
