@@ -1,0 +1,51 @@
+name: release
+
+on:
+  push:
+    tags: 
+      - "v*.*.*"
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Archive Package
+        id: archive
+        uses: somaz94/compress-decompress@v1
+        with:
+          command: compress
+          source: ./package
+          format: zip
+
+      - name: Rename Package
+        run: mv ./package.zip ollamacontrol-${{ github.ref_name }}.plasmoid
+
+      - name: Update CHANGELOG
+        id: changelog
+        uses: requarks/changelog-action@v1
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          tag: ${{ github.ref_name }}
+
+      - name: Create Release
+        id: release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          body: ${{ steps.changelog.outputs.changes }}
+          generate_release_notes: true
+          files: ollamacontrol-${{ github.ref_name }}.plasmoid
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Commit CHANGELOG.md
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          branch: main
+          commit_message: 'docs: Update CHANGELOG.md for ${{ github.ref_name }} [skip ci]'
+          file_pattern: CHANGELOG.md
