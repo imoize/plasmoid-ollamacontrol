@@ -53,13 +53,21 @@ function getModels() {
 function diffTime(date) {
     const now = new Date();
     const diffInMs = now - date;
-    const diffInMinutes = Math.round(diffInMs / (60 * 1000));
-    const diffInDays = Math.round(diffInMs / (24 * 60 * 60 * 1000));
+    const diffInSeconds = Math.floor(diffInMs / 1000);
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    const diffInDays = Math.floor(diffInHours / 24);
 
-    if (diffInDays === 0) {
-        return `${diffInMinutes} Minute${diffInMinutes !== 1 ? 's' : ''} Ago`;
-    } else {
+    if (diffInDays > 0) {
         return `${diffInDays} Day${diffInDays !== 1 ? 's' : ''} Ago`;
+    } else if (diffInHours > 0) {
+        return `${diffInHours} Hour${diffInHours !== 1 ? 's' : ''} Ago`;
+    } else if (diffInMinutes > 0) {
+        return `${diffInMinutes} Minute${diffInMinutes !== 1 ? 's' : ''} Ago`;
+    } else if (diffInSeconds >= 10) {
+        return `${diffInSeconds} Second${diffInSeconds !== 1 ? 's' : ''} Ago`;
+    } else {
+        return "Just now";
     }
 }
 
