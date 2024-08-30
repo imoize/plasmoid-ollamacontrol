@@ -1,5 +1,14 @@
 # Plasmoid Ollama Control
 
+## Features
+
+- [X] Start/Stop Ollama
+- [X] List Models
+- [X] Load Model
+- [X] Unload Model
+- [] Delete Model
+- [] Update Model
+
 ## Screenshots
 
 ![](./images/screenshot1.png)
