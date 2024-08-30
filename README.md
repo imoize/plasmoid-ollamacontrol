@@ -6,8 +6,8 @@
 - [X] List Models
 - [X] Load Model
 - [X] Unload Model
-- [] Delete Model
-- [] Update Model
+- [ ] Delete Model
+- [ ] Update Model
 
 ## Screenshots
 
