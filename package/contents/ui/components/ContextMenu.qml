@@ -18,9 +18,9 @@ PlasmaComponents.Menu {
     PlasmaComponents.MenuItem {
         id: copyMenuItem
         text: i18n("Copy")
-
+        icon.name: Qt.resolvedUrl("../icons/copy.svg")
         onTriggered: {
-
+            listPage.createActionsDialog(modelName, "copy");
         }
         onHoveredChanged: {
             if (!hovered) {

@@ -47,7 +47,7 @@ ColumnLayout {
     function doActionsHandler(modelName, destination, action) {
         if (action === "copy") {
             const source = modelName;
-
+            Utils.copyModel(source, destination);
         } else if (action === "delete") {
             Utils.commands["deleteModel"].run(modelName);
         }
@@ -136,11 +136,6 @@ ColumnLayout {
             delegate: ModelsDelegate {
                 showSeparator: index !== 0
                 width: modelListView.width
-            }
-
-            function openDialog(modelName) {
-                deleteDialog.open();
-                listPage.modelName = modelName;
             }
         }
     }

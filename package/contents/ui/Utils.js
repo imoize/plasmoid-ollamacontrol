@@ -160,6 +160,30 @@ function handleModel(model, action) {
     sendRequest(generateUrl);
 }
 
+function copyModel(source, destination) {
+    const url = cfg.ollamaUrl + "/api/copy";
+    const data = JSON.stringify({
+        source: source,
+        destination: destination,
+    });
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                getModels();
+            } else {
+                console.error("Error copying model: " + xhr.status);
+                getModels();
+            }
+        }
+    };
+    xhr.send(data);
+}
+
 function deleteModelCallback(resCode, _, stdout) {
     if (resCode === "200") {
         endAll();

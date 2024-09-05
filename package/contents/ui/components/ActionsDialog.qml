@@ -30,7 +30,7 @@ PlasmaComponents.Dialog {
         Layout.fillHeight: true
 
         PlasmaComponents.Label {
-            id: copyMessage
+            id: modelDialogMessage
             Layout.alignment: Qt.AlignHCenter
             Layout.topMargin: Kirigami.Units.smallSpacing * 2
             Layout.bottomMargin: Kirigami.Units.smallSpacing * 2
@@ -64,6 +64,11 @@ PlasmaComponents.Dialog {
                     actionsDialog.standardButton(QQC2.Dialog.Ok).enabled = false;
                 }
             }
+            onAccepted: {
+                if (copyDestination.text !== "") {
+                actionsDialog.accepted();
+                }
+            }
         }
     }
 
@@ -82,7 +87,7 @@ PlasmaComponents.Dialog {
         if (actionsDialog.action === "copy") {
             const destination = copyDestination.text;
             if (copyDestination.text !== "") {
-
+                actionsDialog.doActions(modelName, destination, "copy");
             }
             actionsDialog.closeActionsDialog();
         } else if (actionsDialog.action === "delete") {
