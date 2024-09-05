@@ -12,10 +12,46 @@ import "Utils.js" as Utils
 
 ColumnLayout {
     id: listPage
+
     property alias view: modelListView
     property alias model: modelListView.model
     property alias modelsCombobox: modelsCombobox
-    property string modelName: ""
+    property var actionsDialog: null
+
+    function createActionsDialog(modelName, action) {
+        if (actionsDialog === null) {
+            var component = Qt.createComponent("./components/ActionsDialog.qml");
+            actionsDialog = component.createObject(parent);
+            actionsDialog.modelName = modelName;
+            actionsDialog.action = action;
+            if (action === "copy") {
+                actionsDialog.standardButtons = QQC2.Dialog.Ok | QQC2.Dialog.Cancel;
+                actionsDialog.standardButton(QQC2.Dialog.Ok).enabled = false;
+            } else if (action === "delete") {
+                actionsDialog.standardButtons = QQC2.Dialog.Yes | QQC2.Dialog.No;
+            }
+            if (actionsDialog !== null) {
+                actionsDialog.closeActionsDialog.connect(destroyActionsDialog);
+                actionsDialog.doActions.connect(doActionsHandler);
+            }
+        }
+    }
+
+    function destroyActionsDialog() {
+        if (actionsDialog !== null) {
+            actionsDialog.destroy();
+            actionsDialog = null;
+        }
+    }
+
+    function doActionsHandler(modelName, destination, action) {
+        if (action === "copy") {
+            const source = modelName;
+
+        } else if (action === "delete") {
+
+        }
+    }
 
     property var header: PlasmaExtras.PlasmoidHeading {
         contentItem: RowLayout {
@@ -34,7 +70,9 @@ ColumnLayout {
                     Utils.getModels();
                 }
                 display: QQC2.AbstractButton.IconOnly
-                PlasmaComponents.ToolTip{ text: parent.text }
+                PlasmaComponents.ToolTip {
+                    text: parent.text
+                }
             }
         }
     }
@@ -45,7 +83,6 @@ ColumnLayout {
 
             PlasmaComponents.ComboBox {
                 id: modelsCombobox
-
                 Layout.fillWidth: true
                 model: runningModels
                 textRole: "text"
@@ -59,10 +96,12 @@ ColumnLayout {
                 text: i18n("Eject")
                 icon.name: Qt.resolvedUrl("icons/eject.svg")
                 onClicked: {
-                    var model = modelsCombobox.currentText
+                    var model = modelsCombobox.currentText;
                     Utils.unloadModel(model);
                 }
-                PlasmaComponents.ToolTip{ text: i18n("Eject Model") }
+                PlasmaComponents.ToolTip {
+                    text: i18n("Eject Model")
+                }
             }
         }
     }
@@ -75,8 +114,8 @@ ColumnLayout {
                 if (ollamaRunning) {
                     Utils.getModels();
                 }
-            } else {
-                deleteDialog.close();
+            } else if (!main.expanded) {
+                destroyActionsDialog();
             }
         }
     }
@@ -89,7 +128,7 @@ ColumnLayout {
         contentItem: ListView {
             id: modelListView
             model: models
-            highlight: PlasmaExtras.Highlight { }
+            highlight: PlasmaExtras.Highlight {}
             highlightFollowsCurrentItem: true
             highlightMoveDuration: 0
             currentIndex: -1
@@ -102,36 +141,6 @@ ColumnLayout {
             function openDialog(modelName) {
                 deleteDialog.open();
                 listPage.modelName = modelName;
-            }
-
-            QQC2.Dialog {
-                id: deleteDialog
-                anchors.centerIn: parent
-                contentWidth: Kirigami.Units.gridUnit * 13
-                modal: true
-                standardButtons: QQC2.Dialog.Yes | QQC2.Dialog.Cancel
-                closePolicy: QQC2.Popup.NoAutoClose | QQC2.Popup.CloseOnPressOutside
-
-                PlasmaComponents.Label {
-                    id: dialogMessage
-                    anchors.centerIn: parent
-                    width: deleteDialog.contentWidth
-                    // width: Kirigami.Units.gridUnit * 13
-                    horizontalAlignment: Text.AlignHCenter
-                    font.bold: true
-                    wrapMode: Text.WordWrap
-                    font.pixelSize: Kirigami.Theme.defaultFont.pixelSize
-                    text: i18n("Delete '" + modelName + "' model ?")
-                }
-
-                footer: QQC2.DialogButtonBox {
-                    alignment: Qt.AlignHCenter
-                }
-
-                onAccepted: Utils.deleteModel(modelName);
-                onRejected: {
-                    deleteDialog.close();
-                }
             }
         }
     }
