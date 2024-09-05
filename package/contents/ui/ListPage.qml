@@ -90,8 +90,8 @@ ColumnLayout {
             id: modelListView
             model: models
             highlight: PlasmaExtras.Highlight { }
+            highlightFollowsCurrentItem: true
             highlightMoveDuration: 0
-            highlightResizeDuration: 0
             currentIndex: -1
 
             delegate: ModelsDelegate {
