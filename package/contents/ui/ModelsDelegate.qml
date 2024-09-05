@@ -8,7 +8,7 @@ import org.kde.plasma.components as PlasmaComponents
 import "Utils.js" as Utils
 
 PlasmaComponents.ItemDelegate {
-    id: modeltem
+    id: modelItem
     height: Math.max(label.height, Math.round(Kirigami.Units.gridUnit * 1.6)) + 2 * Kirigami.Units.smallSpacing
     enabled: true
 
@@ -18,7 +18,7 @@ PlasmaComponents.ItemDelegate {
         anchors.fill: parent
         hoverEnabled: true
         onEntered: {
-            modelListView.currentIndex = index
+            modelListView.currentIndex = index;
         }
         onExited: {
             if (modelListView.currentIndex === index)
@@ -27,7 +27,6 @@ PlasmaComponents.ItemDelegate {
 
         Item {
             id: label
-            height: labelLayout.height
             anchors {
                 left: parent.left
                 right: parent.right
@@ -35,6 +34,7 @@ PlasmaComponents.ItemDelegate {
                 // rightMargin: Kirigami.Units.gridUnit - 3.2
                 verticalCenter: parent.verticalCenter
             }
+            height: labelLayout.height
 
             RowLayout {
                 id: labelLayout
@@ -114,40 +114,56 @@ PlasmaComponents.ItemDelegate {
                     text: i18n("Load Model")
                     icon.name: Qt.resolvedUrl("icons/up-square.svg")
                     onClicked: {
-                        var model = modelName
-                        Utils.loadModel(model);
+                        var model = modelName;
                     }
-                    display:QQC2.AbstractButton.IconOnly
-                    PlasmaComponents.ToolTip { text: parent.text }
+                    display: QQC2.AbstractButton.IconOnly
+                    PlasmaComponents.ToolTip {
+                        text: parent.text
+                    }
                 }
 
                 PlasmaComponents.ToolButton {
                     id: contextMenuButton
+                    property var contextMenu: null
                     // anchors.centerIn: parent
                     checkable: true
-                    checked: contextMenu.opened
                     text: i18n("More")
                     icon.name: Qt.resolvedUrl("icons/options.svg")
-                    onClicked: { 
-                        contextMenu.open();
+                    onClicked: {
+                        createContextMenu(modelName);
                     }
-                    display:QQC2.AbstractButton.IconOnly
-                    PlasmaComponents.ToolTip { text: parent.text }
-                    
-                    QQC2.Menu {
-                        id: contextMenu
-                        modal: true
-                        y: contextMenuButton.height + Kirigami.Units.smallSpacing
-                        margins: Kirigami.Units.smallSpacing * 5
-                        // width: Kirigami.Units.gridUnit * 7
-                        closePolicy: QQC2.Popup.CloseOnPressOutside | QQC2.Popup.CloseOnReleaseOutside
+                    display: QQC2.AbstractButton.IconOnly
+                    PlasmaComponents.ToolTip {
+                        text: parent.text
+                    }
 
-                        QQC2.MenuItem {
-                            text: i18n("Delete (WIP)")
-                            icon.name: Qt.resolvedUrl("icons/delete.svg")
-                            // onTriggered: {
-                            //     listPage.view.openDialog(modelName);
-                            // }
+                    function createContextMenu(modelName) {
+                        if (contextMenu === null) {
+                            var component = Qt.createComponent("./components/ContextMenu.qml");
+                            contextMenu = component.createObject(contextMenuButton);
+                            contextMenuButton.checked = true;
+                            contextMenu.modelName = modelName;
+                            contextMenu.open();
+                            if (contextMenu !== null) {
+                                contextMenu.closeContextMenu.connect(destroyContextMenu);
+                            }
+                        }
+                    }
+
+                    function destroyContextMenu() {
+                        if (contextMenu !== null) {
+                            contextMenu.destroy();
+                            contextMenuButton.checked = false;
+                            contextMenu = null;
+                        }
+                    }
+                }
+                
+                Connections {
+                    target: main
+                    function onExpandedChanged() {
+                        if (!main.expanded) {
+                            contextMenuButton.destroyContextMenu();
                         }
                     }
                 }
