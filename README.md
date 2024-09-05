@@ -2,17 +2,28 @@
 
 ## Features
 
-- [X] Start/Stop Ollama
+- [X] Start / Stop Ollama from applet
 - [X] List Models
-- [X] Load Model
-- [X] Unload Model
-- [ ] Delete Model
-- [ ] Update Model
+- [X] List Running Models
+- [X] Load / Unload Model
+- [ ] Show Model Info
+- [X] Copy
+- [X] Delete
+- [ ] Pull
+- [ ] Update
 
 ## Screenshots
 
 ![](./images/screenshot1.png)
 ![](./images/screenshot2.png)
+
+## Package Dependencies
+
+### Arch
+
+```bash
+sudo pacman -S curl kdeplasma-addons
+```
 
 ## Installation
 
