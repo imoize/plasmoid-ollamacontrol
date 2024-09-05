@@ -1,34 +1,34 @@
 function addToModel(...details) {
     models.append({
-        "modelName": details[0],
-        "modifiedTime": details[1],
-        "modelSize": details[2],
-        "modelFormat": details[3],
-        "modelArch": details[4],
-        "modelParam": details[5],
-        "modelQuant": details[6]
+        modelName: details[0],
+        modifiedTime: details[1],
+        modelSize: details[2],
+        modelFormat: details[3],
+        modelArch: details[4],
+        modelParam: details[5],
+        modelQuant: details[6],
     });
 }
 
 function invokeDelayTimerCallback(callback, interval) {
     if (typeof delayTimerCallback === "function") {
         delayTimerCallback(callback, interval);
-    } 
+    }
 }
 
 function getModels() {
-    const url = cfg.ollamaUrl + '/api/tags';
+    const url = cfg.ollamaUrl + "/api/tags";
     models.clear();
 
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', url, true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.open("GET", url, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
 
-    xhr.onreadystatechange = function() {
+    xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 200) {
                 const response = JSON.parse(xhr.responseText);
-                response.models.forEach(model => {
+                response.models.forEach((model) => {
                     const modelName = model.name;
                     const modifiedAt = new Date(model.modified_at);
                     const modelByte = model.size;
@@ -39,11 +39,19 @@ function getModels() {
                     const modifiedTime = diffTime(modifiedAt);
                     const modelSize = bytesToSize(modelByte);
 
-                    addToModel(modelName, modifiedTime, modelSize, modelFormat, modelArch, modelParam, modelQuant);
+                    addToModel(
+                        modelName,
+                        modifiedTime,
+                        modelSize,
+                        modelFormat,
+                        modelArch,
+                        modelParam,
+                        modelQuant
+                    );
                 });
                 getRunningModels();
             } else {
-                console.error('Error Get Models: ' + xhr.status);
+                console.error("Error Get Models: " + xhr.status);
             }
         }
     };
@@ -59,13 +67,13 @@ function diffTime(date) {
     const diffInDays = Math.floor(diffInHours / 24);
 
     if (diffInDays > 0) {
-        return `${diffInDays} Day${diffInDays !== 1 ? 's' : ''} Ago`;
+        return `${diffInDays} Day${diffInDays !== 1 ? "s" : ""} Ago`;
     } else if (diffInHours > 0) {
-        return `${diffInHours} Hour${diffInHours !== 1 ? 's' : ''} Ago`;
+        return `${diffInHours} Hour${diffInHours !== 1 ? "s" : ""} Ago`;
     } else if (diffInMinutes > 0) {
-        return `${diffInMinutes} Minute${diffInMinutes !== 1 ? 's' : ''} Ago`;
+        return `${diffInMinutes} Minute${diffInMinutes !== 1 ? "s" : ""} Ago`;
     } else if (diffInSeconds >= 10) {
-        return `${diffInSeconds} Second${diffInSeconds !== 1 ? 's' : ''} Ago`;
+        return `${diffInSeconds} Second${diffInSeconds !== 1 ? "s" : ""} Ago`;
     } else {
         return "Just now";
     }
@@ -73,7 +81,7 @@ function diffTime(date) {
 
 function bytesToSize(bytes) {
     const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
-    const sizeIndex = Math.floor((Math.log(+bytes) / Math.log(2)) / 10);
+    const sizeIndex = Math.floor(Math.log(+bytes) / Math.log(2) / 10);
     const placeValue = Math.pow(10, 3 * sizeIndex);
     let value = bytes / placeValue;
 
@@ -91,86 +99,65 @@ function bytesToSize(bytes) {
 }
 
 function getRunningModels() {
-    const url = cfg.ollamaUrl + '/api/ps';
+    const url = cfg.ollamaUrl + "/api/ps";
     runningModels.clear();
 
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', url, true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.open("GET", url, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
 
-    xhr.onreadystatechange = function() {
+    xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 200) {
                 const response = JSON.parse(xhr.responseText);
 
-                response.models.forEach(model => {
+                response.models.forEach((model) => {
                     const models = model.model;
 
                     runningModels.append({
-                        text: models
+                        text: models,
                     });
                 });
                 if (runningModels.count > 0) {
                     listPage.modelsCombobox.currentIndex = 0;
                 }
             } else {
-                console.error('Error Get Running Model: ' + xhr.status);
+                console.error("Error Get Running Model: " + xhr.status);
             }
         }
     };
     xhr.send();
 }
 
-function loadModel(models) {
-    const url = cfg.ollamaUrl + '/api/generate';
+function handleModel(model, action) {
+    const generateUrl = cfg.ollamaUrl + "/api/generate";
+    const embedUrl = cfg.ollamaUrl + "/api/embed";
     const data = JSON.stringify({
-        "model": models
+        model: model,
+        keep_alive: action === "unload" ? 0 : undefined,
     });
 
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', url, true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
+    function sendRequest(url) {
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader("Content-Type", "application/json");
 
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 200) {
-
-                invokeDelayTimerCallback(() => {
-                    getRunningModels();
-                });
-            } else {
-                console.error('Error Unload: ' + xhr.status + ' ' + xhr.statusText);
-                console.error('Response Unload: ' + xhr.responseText);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    invokeDelayTimerCallback(() => {
+                        getRunningModels();
+                    });
+                } else if (xhr.status === 400 && url === generateUrl) {
+                    sendRequest(embedUrl);
+                } else {
+                    console.error("Error " + action + ": " + xhr.status + " " + xhr.statusText + " " + xhr.responseText);
+                }
             }
-        }
-    };
-    xhr.send(data);
-}
-
-function unloadModel(models) {
-    const url = cfg.ollamaUrl + '/api/generate';
-    const data = JSON.stringify({
-        "model": models, "keep_alive": 0
-    });
-
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', url, true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 200) {
-
-                invokeDelayTimerCallback(() => {
-                    getRunningModels();
-                });
-            } else {
-                console.error('Error Unload: ' + xhr.status + ' ' + xhr.statusText);
-                console.error('Response Unload: ' + xhr.responseText);
-            }
-        }
-    };
-    xhr.send(data);
+        };
+        xhr.send(data);
+    }
+    sendRequest(generateUrl);
 }
 
 class Command {
@@ -182,9 +169,9 @@ class Command {
 
     run(...args) {
         console.log("Command identifier:", this.txt);
-    
+
         let newCmd;
-        if (this.txt === 'start-ollama' || this.txt === 'stop-ollama') {
+        if (this.txt === "start-ollama" || this.txt === "stop-ollama") {
             newCmd = this.cmd.replace("{}", cfg.ollamaUrl);
         } else {
             newCmd = this.cmd.replace("{}", args[0]);
@@ -194,7 +181,7 @@ class Command {
     }
 
     exec(cmd, ...args) {
-        executable.exec(cmd, (_,stdout,stderr,_2) => {
+        executable.exec(cmd, (_, stdout, stderr, _2) => {
             // console.log(`Command Output: \nOutput: ${stdout}\nstderr: ${stderr}`);
 
             const match = stdout.trim().match(/Response:(\d+)/);
@@ -202,13 +189,12 @@ class Command {
 
             // console.log("Response Code:", resCode || "No match found for response code");
 
-            if (this.txt === 'start-ollama' || this.txt === 'stop-ollama') {
-                const delay = this.txt === 'stop-ollama' ? 2000 : 5000;
+            if (this.txt === "start-ollama" || this.txt === "stop-ollama") {
+                const delay = this.txt === "stop-ollama" ? 2000 : 5000;
 
                 invokeDelayTimerCallback(() => {
                     this.callback();
                 }, delay);
-                
             } else {
                 this.callback(resCode, ...args, stdout);
             }
@@ -217,11 +203,15 @@ class Command {
 }
 
 let commands = {
-    startOllama: new Command("systemctl start ollama.service",
-        "start-ollama", checkStat
+    startOllama: new Command(
+        "systemctl start ollama.service",
+        "start-ollama",
+        checkStat
     ),
-    stopOllama: new Command("systemctl stop ollama.service",
-        "stop-ollama", checkStat
+    stopOllama: new Command(
+        "systemctl stop ollama.service",
+        "stop-ollama",
+        checkStat
     ),
 };
 
@@ -230,13 +220,13 @@ function endAll() {
 }
 
 function checkStat() {
-    const url = cfg.ollamaUrl + '/api/tags';
+    const url = cfg.ollamaUrl + "/api/tags";
 
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', url, true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.open("GET", url, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
 
-    xhr.onreadystatechange = function() {
+    xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 200) {
                 if (ollamaRunning === false) {
@@ -254,8 +244,7 @@ function checkStat() {
                 updateActionButton("Start Ollama", Qt.resolvedUrl("icons/start.svg"), "startOllama");
 
                 // console.log("Ollama Running: " + ollamaRunning + " | Ollama is not running");
-                console.error('Error Check Status: ' + xhr.status);
-
+                console.error("Error Check Status: " + xhr.status);
             }
         }
     };

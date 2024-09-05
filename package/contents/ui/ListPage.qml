@@ -97,7 +97,7 @@ ColumnLayout {
                 icon.name: Qt.resolvedUrl("icons/eject.svg")
                 onClicked: {
                     var model = modelsCombobox.currentText;
-                    Utils.unloadModel(model);
+                    Utils.handleModel(model, "unload");
                 }
                 PlasmaComponents.ToolTip {
                     text: i18n("Eject Model")

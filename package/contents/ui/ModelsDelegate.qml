@@ -115,6 +115,7 @@ PlasmaComponents.ItemDelegate {
                     icon.name: Qt.resolvedUrl("icons/up-square.svg")
                     onClicked: {
                         var model = modelName;
+                        Utils.handleModel(modelName, "load");
                     }
                     display: QQC2.AbstractButton.IconOnly
                     PlasmaComponents.ToolTip {
