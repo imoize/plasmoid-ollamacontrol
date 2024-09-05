@@ -239,18 +239,18 @@ function checkStat() {
     xhr.onreadystatechange = function() {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 200) {
+                if (ollamaRunning === false) {
+                    getModels();
+                }
                 ollamaRunning = true;
-
                 updateActionButton("Stop Ollama", Qt.resolvedUrl("icons/stop.svg"), "stopOllama");
 
                 // console.log("Ollama Running: " + ollamaRunning + " | Ollama is running");
             } else {
                 endAll();
                 ollamaRunning = false;
-
                 models.clear();
                 runningModels.clear();
-                
                 updateActionButton("Start Ollama", Qt.resolvedUrl("icons/start.svg"), "startOllama");
 
                 // console.log("Ollama Running: " + ollamaRunning + " | Ollama is not running");
