@@ -49,7 +49,7 @@ ColumnLayout {
             const source = modelName;
 
         } else if (action === "delete") {
-
+            Utils.commands["deleteModel"].run(modelName);
         }
     }
 

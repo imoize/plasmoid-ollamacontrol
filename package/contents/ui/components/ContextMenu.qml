@@ -65,7 +65,7 @@ PlasmaComponents.Menu {
         text: i18n("Delete")
         icon.name: Qt.resolvedUrl("../icons/delete.svg")
         onTriggered: {
-
+            listPage.createActionsDialog(modelName, "delete");
         }
         onHoveredChanged: {
             if (!hovered) {

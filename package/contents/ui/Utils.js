@@ -160,6 +160,16 @@ function handleModel(model, action) {
     sendRequest(generateUrl);
 }
 
+function deleteModelCallback(resCode, _, stdout) {
+    if (resCode === "200") {
+        endAll();
+        getModels();
+    } else if (resCode !== "200" || resCode === "") {
+        endAll()
+        getModels();
+    }
+}
+
 class Command {
     constructor(cmd, txt, callback) {
         this.cmd = cmd;
@@ -168,11 +178,14 @@ class Command {
     }
 
     run(...args) {
-        console.log("Command identifier:", this.txt);
+        // console.log("Command identifier:", this.txt);
 
         let newCmd;
-        if (this.txt === "start-ollama" || this.txt === "stop-ollama") {
-            newCmd = this.cmd.replace("{}", cfg.ollamaUrl);
+        if (this.txt === "delete-model") {
+            const data = JSON.stringify({
+                name: args[0],
+            });
+            newCmd = this.cmd.replace("{url}", cfg.ollamaUrl).replace("{data}", data);
         } else {
             newCmd = this.cmd.replace("{}", args[0]);
         }
@@ -212,6 +225,11 @@ let commands = {
         "systemctl stop ollama.service",
         "stop-ollama",
         checkStat
+    ),
+    deleteModel: new Command(
+        "curl --write-out 'Response:%{http_code}' -X DELETE {url}/api/delete -d '{data}'",
+        "delete-model",
+        deleteModelCallback
     ),
 };
 

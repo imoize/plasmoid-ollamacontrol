@@ -86,7 +86,7 @@ PlasmaComponents.Dialog {
             }
             actionsDialog.closeActionsDialog();
         } else if (actionsDialog.action === "delete") {
-
+            actionsDialog.doActions(modelName, undefined, "delete");
         }
         actionsDialog.closeActionsDialog();
     }

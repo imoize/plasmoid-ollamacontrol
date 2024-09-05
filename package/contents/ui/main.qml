@@ -96,7 +96,7 @@ PlasmoidItem {
 
         function exec(cmd, callback) {
             listeners[cmd] = execCallback.bind(executable, callback)
-            console.log("Running command:", cmd)
+            // console.log("Running command:", cmd)
             connectSource(cmd)
         }
 
