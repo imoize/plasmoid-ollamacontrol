@@ -16,7 +16,7 @@ PlasmaComponents.ItemDelegate {
 
     MouseArea {
         anchors.fill: parent
-        hoverEnabled: true
+        hoverEnabled: isLoading ? false : true
         onEntered: {
             modelListView.currentIndex = index;
         }

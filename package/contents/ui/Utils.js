@@ -137,6 +137,8 @@ function handleModel(model, action) {
         keep_alive: action === "unload" ? 0 : undefined,
     });
 
+    isLoading = true;
+
     function sendRequest(url) {
         const xhr = new XMLHttpRequest();
         xhr.open("POST", url, true);
@@ -148,10 +150,12 @@ function handleModel(model, action) {
                     invokeDelayTimerCallback(() => {
                         getRunningModels();
                     });
+                    isLoading = false;
                 } else if (xhr.status === 400 && url === generateUrl) {
                     sendRequest(embedUrl);
                 } else {
                     console.error("Error " + action + ": " + xhr.status + " " + xhr.statusText + " " + xhr.responseText);
+                    isLoading = false;
                 }
             }
         };
@@ -167,6 +171,8 @@ function copyModel(source, destination) {
         destination: destination,
     });
 
+    isLoading = true;
+
     const xhr = new XMLHttpRequest();
     xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-Type", "application/json");
@@ -175,9 +181,11 @@ function copyModel(source, destination) {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 200) {
                 getModels();
+                isLoading = false;
             } else {
                 console.error("Error copying model: " + xhr.status);
                 getModels();
+                isLoading = false;
             }
         }
     };
@@ -188,9 +196,11 @@ function deleteModelCallback(resCode, _, stdout) {
     if (resCode === "200") {
         endAll();
         getModels();
+        isLoading = false;
     } else if (resCode !== "200" || resCode === "") {
         endAll()
         getModels();
+        isLoading = false;
     }
 }
 
@@ -206,6 +216,7 @@ class Command {
 
         let newCmd;
         if (this.txt === "delete-model") {
+            isLoading = true;
             const data = JSON.stringify({
                 name: args[0],
             });

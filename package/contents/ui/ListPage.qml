@@ -56,7 +56,7 @@ ColumnLayout {
     property var header: PlasmaExtras.PlasmoidHeading {
         contentItem: RowLayout {
             spacing: 0
-            enabled: models.count > 0
+            enabled: models.count > 0 && !isLoading
 
             PlasmaExtras.SearchField {
                 id: filter
@@ -79,7 +79,7 @@ ColumnLayout {
 
     property var footer: PlasmaExtras.PlasmoidHeading {
         contentItem: RowLayout {
-            enabled: runningModels.count > 0
+            enabled: runningModels.count > 0 && !isLoading
 
             PlasmaComponents.ComboBox {
                 id: modelsCombobox
@@ -124,6 +124,7 @@ ColumnLayout {
         Layout.fillWidth: true
         Layout.fillHeight: true
         background: null
+        enabled: !isLoading
 
         contentItem: ListView {
             id: modelListView

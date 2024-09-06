@@ -14,6 +14,7 @@ PlasmoidItem {
     id: main
 
     property bool ollamaRunning: false
+    property bool isLoading: false
     property var cfg: plasmoid.configuration
     property var delayCallback: function() {}
     signal pop()
@@ -145,6 +146,12 @@ PlasmoidItem {
 
         header: stack.currentItem.header
         footer: stack.currentItem.footer
+
+        PlasmaComponents.BusyIndicator {
+            id: busyIndicator
+            anchors.centerIn: parent
+            running: isLoading
+        }
 
         QQC2.StackView {
             id: stack
