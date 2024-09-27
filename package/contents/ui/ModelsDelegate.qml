@@ -112,7 +112,7 @@ PlasmaComponents.ItemDelegate {
                     id: loadModelButton
                     // anchors.centerIn: parent
                     text: i18n("Load Model")
-                    icon.name: Qt.resolvedUrl("icons/up-square.svg")
+                    icon.name: Qt.resolvedUrl("icons/oc-up-square.svg")
                     onClicked: {
                         var model = modelName;
                         Utils.handleModel(modelName, "load");
@@ -129,7 +129,7 @@ PlasmaComponents.ItemDelegate {
                     // anchors.centerIn: parent
                     checkable: true
                     text: i18n("More")
-                    icon.name: Qt.resolvedUrl("icons/options.svg")
+                    icon.name: Qt.resolvedUrl("icons/oc-options.svg")
                     onClicked: {
                         createContextMenu(modelName);
                     }
@@ -176,7 +176,7 @@ PlasmaComponents.ItemDelegate {
         id: separatorLine
         anchors {
             horizontalCenter: parent.horizontalCenter
-            top: parent.top
+            top: parent.bottom
         }
         imagePath: "widgets/line"
         elementId: "horizontal-line"

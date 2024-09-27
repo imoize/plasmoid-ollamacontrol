@@ -65,7 +65,7 @@ ColumnLayout {
 
             PlasmaComponents.ToolButton {
                 text: i18n("Refresh")
-                icon.name: Qt.resolvedUrl("icons/refresh.svg")
+                icon.name: Qt.resolvedUrl("icons/oc-refresh.svg")
                 onClicked: {
                     Utils.getModels();
                 }
@@ -94,7 +94,7 @@ ColumnLayout {
                 id: ejectButton
                 enabled: modelsCombobox.currentIndex !== -1
                 text: i18n("Eject")
-                icon.name: Qt.resolvedUrl("icons/eject.svg")
+                icon.name: Qt.resolvedUrl("icons/oc-eject.svg")
                 onClicked: {
                     var model = modelsCombobox.currentText;
                     Utils.handleModel(model, "unload");
@@ -135,7 +135,7 @@ ColumnLayout {
             currentIndex: -1
 
             delegate: ModelsDelegate {
-                showSeparator: index !== 0
+                showSeparator: index !== -1
                 width: modelListView.width
             }
         }

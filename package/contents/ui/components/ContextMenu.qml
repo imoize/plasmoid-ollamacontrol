@@ -18,7 +18,7 @@ PlasmaComponents.Menu {
     PlasmaComponents.MenuItem {
         id: copyMenuItem
         text: i18n("Copy")
-        icon.name: Qt.resolvedUrl("../icons/copy.svg")
+        icon.name: Qt.resolvedUrl("../icons/oc-copy.svg")
         onTriggered: {
             listPage.createActionsDialog(modelName, "copy");
         }
@@ -37,7 +37,7 @@ PlasmaComponents.Menu {
     // PlasmaComponents.MenuItem {
     //     id: pushMenuItem
     //     text: i18n("Push")
-    //     icon.name: Qt.resolvedUrl("../icons/up-tray.svg")
+    //     icon.name: Qt.resolvedUrl("../icons/oc-up-tray.svg")
     //     onTriggered: {}
     //     onHoveredChanged: {
     //         if (!hovered) {
@@ -49,7 +49,7 @@ PlasmaComponents.Menu {
     // PlasmaComponents.MenuItem {
     //     id: updateMenuItem
     //     text: i18n("Update")
-    //     icon.name: Qt.resolvedUrl("../icons/down-tray.svg")
+    //     icon.name: Qt.resolvedUrl("../icons/oc-down-tray.svg")
     //     onTriggered: {}
     //     onHoveredChanged: {
     //         if (!hovered) {
@@ -63,7 +63,7 @@ PlasmaComponents.Menu {
     PlasmaComponents.MenuItem {
         id: deleteMenuItem
         text: i18n("Delete")
-        icon.name: Qt.resolvedUrl("../icons/delete.svg")
+        icon.name: Qt.resolvedUrl("../icons/oc-delete.svg")
         onTriggered: {
             listPage.createActionsDialog(modelName, "delete");
         }
