@@ -60,17 +60,10 @@ PlasmoidItem {
     Plasmoid.contextualActions: [
         PlasmaCore.Action {
             id: actionButton
-            property string command: "startOllama"
-            text: i18n("Start Ollama")
-            icon.name: Qt.resolvedUrl("icons/start.svg")
             enabled: cfg.ollamaUrl.startsWith("http://localhost") || cfg.ollamaUrl.startsWith("http://127.0.0.1")
-            onTriggered: {
-                if (command === "startOllama") {
-                    Utils.commands["startOllama"].run();
-                } else if (command === "stopOllama") {
-                    Utils.commands["stopOllama"].run();
-                }
-            }
+            text: ollamaRunning ? i18n("Stop Ollama") : i18n("Start Ollama")
+            icon.name: ollamaRunning ? Qt.resolvedUrl("icons/oc-stop.svg") : Qt.resolvedUrl("icons/oc-start.svg")
+            onTriggered: ollamaRunning ? Utils.commands["stopOllama"].run() : Utils.commands["startOllama"].run()
         }
     ]
 
@@ -132,7 +125,7 @@ PlasmoidItem {
         anchors.fill: parent
         active: compact.containsMouse
         activeFocusOnTab: true
-        source: Qt.resolvedUrl("icons/ollama-symbolic.svg")
+        source: Qt.resolvedUrl("icons/oc-ollama-symbolic.svg")
         }
     }
 

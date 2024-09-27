@@ -273,7 +273,7 @@ function endAll() {
 }
 
 function checkStat() {
-    const url = cfg.ollamaUrl + "/api/tags";
+    const url = cfg.ollamaUrl + "/api/version";
 
     const xhr = new XMLHttpRequest();
     xhr.open("GET", url, true);
@@ -286,7 +286,6 @@ function checkStat() {
                     getModels();
                 }
                 ollamaRunning = true;
-                updateActionButton("Stop Ollama", Qt.resolvedUrl("icons/stop.svg"), "stopOllama");
 
                 // console.log("Ollama Running: " + ollamaRunning + " | Ollama is running");
             } else {
@@ -294,7 +293,6 @@ function checkStat() {
                 ollamaRunning = false;
                 models.clear();
                 runningModels.clear();
-                updateActionButton("Start Ollama", Qt.resolvedUrl("icons/start.svg"), "startOllama");
 
                 // console.log("Ollama Running: " + ollamaRunning + " | Ollama is not running");
                 console.error("Error Check Status: " + xhr.status);
@@ -302,12 +300,4 @@ function checkStat() {
         }
     };
     xhr.send();
-}
-
-function updateActionButton(text, iconName, command) {
-    if (typeof actionButton !== "undefined") {
-        actionButton.text = i18n(text);
-        actionButton.icon.name = iconName;
-        actionButton.command = command;
-    }
 }
