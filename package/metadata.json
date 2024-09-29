@@ -18,7 +18,7 @@
         "Id": "com.github.imoize.ollamacontrol",
         "License": "GPL-3.0",
         "Name": "Ollama Control",
-        "Version": "1.1.3",
+        "Version": "1.2.0",
         "Website": "https://github.com/imoize/plasmoid-ollamacontrol"
     },
     "X-KDE-Keywords": "ollama,ai,llm",
