@@ -1,4 +1,14 @@
 
+## [v1.2.0] - 2024-09-29
+### :bug: Bug Fixes
+- [`fd5e479`](https://github.com/imoize/plasmoid-ollamacontrol/commit/fd5e4797d8c52dcfc77ccc2903d11c73ecabcc37) - Start/Stop Ollama icon not match. *(commit by [@imoize](https://github.com/imoize))*
+
+### :wrench: Chores
+- [`7c62e74`](https://github.com/imoize/plasmoid-ollamacontrol/commit/7c62e7417b0d0db7059e3f4f611be019228958ae) - Rename icons. *(commit by [@imoize](https://github.com/imoize))*
+- [`977f020`](https://github.com/imoize/plasmoid-ollamacontrol/commit/977f020e5b1474e55addca9fc537718578fd4c31) - UI Improvement. *(commit by [@imoize](https://github.com/imoize))*
+- [`6bfa9c4`](https://github.com/imoize/plasmoid-ollamacontrol/commit/6bfa9c411996f70b2232020d2638fc5ec2d32b13) - Bump to v1.2.0 *(commit by [@imoize](https://github.com/imoize))*
+
+
 ## [v1.1.3] - 2024-09-09
 ### :sparkles: New Features
 - [`0ffacc8`](https://github.com/imoize/plasmoid-ollamacontrol/commit/0ffacc8740a93f1b6c88e97abc56dfa108957309) - Support load / unload embedding models. *(commit by [@imoize](https://github.com/imoize))*
@@ -29,3 +39,4 @@
 
 [v1.0.1]: https://github.com/imoize/plasmoid-ollamacontrol/compare/v1.0.0...v1.0.1
 [v1.1.3]: https://github.com/imoize/plasmoid-ollamacontrol/compare/v1.0.1...v1.1.3
+[v1.2.0]: https://github.com/imoize/plasmoid-ollamacontrol/compare/v1.1.3...v1.2.0
