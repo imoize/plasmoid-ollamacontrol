@@ -27,9 +27,19 @@ sudo pacman -S curl kdeplasma-addons
 
 ## Installation
 
-### KDE Store
+### KDE Store (Recommended)
 
 [Store link](https://store.kde.org/p/2196368/)
+
+1. Right click on the desktop
+2. Click on "Enter Edit Mode"
+3. Click on "Add Widgets"
+4. Click on "Get New Widgets"
+5. Click on "Download New Plasma Widgets"
+6. Search for "Ollama Control"
+7. Click on "Install" and you're done!
+
+Go to Configure System Tray > Entries > System Services then choose "Show when relevant" or "Always shown"
 
 ### Build it Yourself
 
