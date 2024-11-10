@@ -1,4 +1,14 @@
 
+## [v1.3.0] - 2024-11-10
+### :sparkles: New Features
+- [`1a20f75`](https://github.com/imoize/plasmoid-ollamacontrol/commit/1a20f7581b2b6f8fbb1218767bb2328e38f8be2c) - Add Show information about a model including details, modelfile, template, parameters, license, system prompt. *(commit by [@imoize](https://github.com/imoize))*
+- [`c2568a6`](https://github.com/imoize/plasmoid-ollamacontrol/commit/c2568a6068e3c6fc4fe27476273992d51dbd035a) - Implement feature to copy model name text to clipboard upon click. *(commit by [@imoize](https://github.com/imoize))*
+- [`7ec7abb`](https://github.com/imoize/plasmoid-ollamacontrol/commit/7ec7abbfd1d79b909939c1f338d45acf8081ad37) - Introduce About dialog to provide additional information. *(commit by [@imoize](https://github.com/imoize))*
+
+### :wrench: Chores
+- [`caefe43`](https://github.com/imoize/plasmoid-ollamacontrol/commit/caefe43ecf90712c86766931458fe92b108adf21) - Bump to v1.3.0 *(commit by [@imoize](https://github.com/imoize))*
+
+
 ## [v1.2.0] - 2024-09-29
 ### :bug: Bug Fixes
 - [`fd5e479`](https://github.com/imoize/plasmoid-ollamacontrol/commit/fd5e4797d8c52dcfc77ccc2903d11c73ecabcc37) - Start/Stop Ollama icon not match. *(commit by [@imoize](https://github.com/imoize))*
@@ -40,3 +50,4 @@
 [v1.0.1]: https://github.com/imoize/plasmoid-ollamacontrol/compare/v1.0.0...v1.0.1
 [v1.1.3]: https://github.com/imoize/plasmoid-ollamacontrol/compare/v1.0.1...v1.1.3
 [v1.2.0]: https://github.com/imoize/plasmoid-ollamacontrol/compare/v1.1.3...v1.2.0
+[v1.3.0]: https://github.com/imoize/plasmoid-ollamacontrol/compare/v1.2.0...v1.3.0
