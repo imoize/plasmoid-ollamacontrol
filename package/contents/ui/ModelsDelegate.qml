@@ -14,6 +14,14 @@ PlasmaComponents.ItemDelegate {
 
     property bool showSeparator
 
+    signal toInfoPage(string modelName)
+
+    onToInfoPage: (modelName) => {
+        stack.push(Qt.resolvedUrl("InfoPage.qml"), {
+            modelName: modelName
+        });
+    }
+
     MouseArea {
         anchors.fill: parent
         hoverEnabled: isLoading ? false : true
@@ -23,6 +31,9 @@ PlasmaComponents.ItemDelegate {
         onExited: {
             if (modelListView.currentIndex === index)
                 modelListView.currentIndex = -1;
+        }
+        onClicked: {
+            modelItem.toInfoPage(modelName);
         }
 
         Item {
@@ -45,8 +56,39 @@ PlasmaComponents.ItemDelegate {
 
                     PlasmaComponents.Label {
                         Layout.bottomMargin: Kirigami.Units.smallSpacing
+                        id: modelNameLabel
                         text: modelName
                         font.bold: true
+
+                        PlasmaComponents.ToolTip {
+                            id: modelNameTooltip
+                            visible: false
+                            text: i18n("Click to copy text")
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            onEntered: {
+                                modelNameTooltip.visible = true
+                            }
+                            onExited: {
+                                modelNameTooltip.visible = false
+                            }
+                            onClicked: {
+                                // Use TextEdit as a helper to copy the text to the clipboard
+                                textEditHelper.text = modelNameLabel.text;
+                                textEditHelper.selectAll();
+                                textEditHelper.copy();
+                                listPage.showPassiveNotification();
+                            }
+                        }
+                    }
+
+                    // Helper TextEdit element to facilitate copying text to the clipboard
+                    TextEdit {
+                        id: textEditHelper
+                        visible: false
                     }
 
                     RowLayout {
