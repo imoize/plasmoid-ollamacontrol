@@ -204,6 +204,49 @@ function deleteModelCallback(resCode, _, stdout) {
     }
 }
 
+function showModelInfo(modelName) {
+    const url = cfg.ollamaUrl + "/api/show";
+    const data = JSON.stringify({
+        name: modelName,
+    });
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+
+                function processTexts(obj) {
+                    for (let key in obj) {
+                        if (typeof obj[key] === "string") {
+                            obj[key] = obj[key]
+                                .replace(/\n/g, " ")
+                                .replace(/\s+/g, " ")
+                                .trim();
+                        } else if (
+                            typeof obj[key] === "object" &&
+                            obj[key] !== null
+                        ) {
+                            processTexts(obj[key]);
+                        }
+                    }
+                }
+
+                processTexts(response);
+
+                const responseText = JSON.stringify(response, null, 2);
+                infoPage.modelInfoText.text = responseText;
+            } else {
+                console.error("No Response");
+            }
+        }
+    };
+    xhr.send(data);
+}
+
 class Command {
     constructor(cmd, txt, callback) {
         this.cmd = cmd;
@@ -282,10 +325,14 @@ function checkStat() {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+                const version = response.version;
+                
                 if (ollamaRunning === false) {
                     getModels();
                 }
                 ollamaRunning = true;
+                ollamaVersion = version;
 
                 // console.log("Ollama Running: " + ollamaRunning + " | Ollama is running");
             } else {
