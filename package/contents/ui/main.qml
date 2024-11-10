@@ -17,6 +17,7 @@ PlasmoidItem {
     property bool isLoading: false
     property var cfg: plasmoid.configuration
     property var delayCallback: function() {}
+    property string ollamaVersion: ""
     signal pop()
 
     switchWidth: Kirigami.Units.gridUnit * 5

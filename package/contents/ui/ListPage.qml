@@ -1,10 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls as QQC2
-import org.kde.plasma.plasmoid
-import org.kde.ksvg as KSvg
-import org.kde.kirigami as Kirigami
-import org.kde.plasma.core as PlasmaCore
 import org.kde.kitemmodels as KItemModels
 import org.kde.plasma.extras as PlasmaExtras
 import org.kde.plasma.components as PlasmaComponents
@@ -16,7 +12,9 @@ ColumnLayout {
     property alias view: modelListView
     property alias model: modelListView.model
     property alias modelsCombobox: modelsCombobox
+    property var passiveNotification: null
     property var actionsDialog: null
+    property var aboutDialog: null
 
     function createActionsDialog(modelName, action) {
         if (actionsDialog === null) {
@@ -53,21 +51,68 @@ ColumnLayout {
         }
     }
 
+    function showPassiveNotification() {
+        var component = Qt.createComponent("./components/PassiveNotification.qml");
+        passiveNotification = component.createObject(parent);
+
+        if (passiveNotification !== null) {
+            passiveNotification.closePassiveNotification.connect(destroyPassiveNotification);
+        }
+    }
+
+    function destroyPassiveNotification() {
+        if (passiveNotification !== null) {
+            passiveNotification.destroy();
+            passiveNotification = null;
+        }
+    }
+
+    function createAboutDialog() {
+        var component = Qt.createComponent("./components/AboutDialog.qml");
+        aboutDialog = component.createObject(parent);
+
+        if (aboutDialog !== null) {
+            aboutDialog.closeAboutDialog.connect(destroyAboutDialog);
+        }
+    }
+
+    function destroyAboutDialog() {
+        if (aboutDialog !== null) {
+            aboutDialog.destroy();
+            aboutDialog = null;
+        }
+    }
+
     property var header: PlasmaExtras.PlasmoidHeading {
         contentItem: RowLayout {
             spacing: 0
-            enabled: models.count > 0 && !isLoading
+            // enabled: models.count > 0 && !isLoading            
 
             PlasmaExtras.SearchField {
                 id: filter
+                enabled: models.count > 0 && !isLoading
                 Layout.fillWidth: true
             }
 
             PlasmaComponents.ToolButton {
                 text: i18n("Refresh")
+                enabled: models.count > 0 && !isLoading
                 icon.name: Qt.resolvedUrl("icons/oc-refresh.svg")
                 onClicked: {
                     Utils.getModels();
+                }
+                display: QQC2.AbstractButton.IconOnly
+                PlasmaComponents.ToolTip {
+                    text: parent.text
+                }
+            }
+            
+            PlasmaComponents.ToolButton {
+                text: i18n("About")
+                enabled: !isLoading
+                icon.name: Qt.resolvedUrl("icons/oc-info.svg")
+                onClicked: {
+                    createAboutDialog();
                 }
                 display: QQC2.AbstractButton.IconOnly
                 PlasmaComponents.ToolTip {
@@ -116,6 +161,8 @@ ColumnLayout {
                 }
             } else if (!main.expanded) {
                 destroyActionsDialog();
+                destroyAboutDialog();
+                destroyPassiveNotification();
             }
         }
     }
